@@ -18,6 +18,7 @@ import java.util.List;
 import io.cloudwalk.loglibrary.Log;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Locale.US;
 
 public class DataUtility {
     private static final String
@@ -202,9 +203,9 @@ public class DataUtility {
         wCRCin &= 0xffff;
         wCRCin ^= 0x0000;
 
-        String trace = Integer.toHexString(wCRCin);
+        String trace = String.format(US, "%4.4s", Integer.toHexString(wCRCin)).replace(' ', '0');
 
-        return getByteArrayFromHexString((trace.length() % 2 != 0) ? "0" + trace : trace);
+        return DataUtility.getByteArrayFromHexString(trace);
     }
 
     /**
