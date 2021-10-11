@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [1.0.3] - 2021-10-11
+- Extend service registering by allowing extra data transferring attached to
+  the caller intent.
+
 ## [1.0.2] - 2021-10-05
 - Update inner conversion from `int` to `byte[]` at `CRC16_XMODEM(byte[])`.
 

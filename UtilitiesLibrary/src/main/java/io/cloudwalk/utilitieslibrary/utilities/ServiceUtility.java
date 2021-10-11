@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
 
@@ -89,7 +90,7 @@ public class ServiceUtility {
      * Searches for a previously bounded service.
      *
      * @param cls service full class name
-     * @return index of the service in the list or -1
+     * @return index of the service in the list
      */
     private static int search(String cls) {
         Log.d(TAG, "search");
@@ -167,13 +168,22 @@ public class ServiceUtility {
     }
 
     /**
+     * See {@link ServiceUtility#register(String, String, Bundle, Callback)}.
+     */
+    public static void register(@NotNull String pkg, @NotNull String cls, @NotNull Callback callback) {
+        register(pkg, cls, null, callback);
+    }
+
+    /**
      * Binds a service according to given {@code pkg} and {@code cls}.<br>
      * Ensures the binding will be undone in the event of a service disconnection.
      *
      * @param pkg service package name
      * @param cls service class name
+     * @param extras optional bind data
+     * @param callback {@link ServiceUtility.Callback}
      */
-    public static void register(@NotNull String pkg, @NotNull String cls, @NotNull Callback callback) {
+    public static void register(@NotNull String pkg, @NotNull String cls, Bundle extras, @NotNull Callback callback) {
         Log.d(TAG, "register");
 
         new Thread() {
@@ -230,6 +240,10 @@ public class ServiceUtility {
 
                     do {
                         Intent intent = new Intent();
+
+                        if (intent.getExtras() == null && extras != null) {
+                            intent.putExtras(extras);
+                        }
 
                         if (count == 0) {
                             intent.setClassName(pkg, cls);
