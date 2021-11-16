@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [1.0.4] - 2021-11-16
+- Update logs.
+
 ## [1.0.3] - 2021-10-11
 - Extend service registering by allowing extra data transferring attached to
   the caller intent.
