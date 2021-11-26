@@ -58,7 +58,7 @@ public class ServiceUtility {
      * See {@link ServiceUtility#retrieve(String, String)}.
      */
     private static IBinder getService(@NotNull String pkg, @NotNull String cls) {
-        Log.d(TAG, "getService");
+        // Log.d(TAG, "getService");
 
         IBinder service = null;
 
@@ -93,7 +93,7 @@ public class ServiceUtility {
      * @return index of the service in the list
      */
     private static int search(String cls) {
-        Log.d(TAG, "search");
+        // Log.d(TAG, "search");
 
         for (int i = 0; i < mServiceList.size(); i++) {
             if (mServiceList.get(i).getComponentName().getClassName().equals(cls)) {
@@ -108,7 +108,7 @@ public class ServiceUtility {
      * @param service {@link IBinder}
      */
     private static void setService(ComponentName name, IBinder service, ServiceConnection serviceConnection) {
-        Log.d(TAG, "setService");
+        // Log.d(TAG, "setService");
 
         sSemaphore.acquireUninterruptibly();
 
@@ -133,7 +133,7 @@ public class ServiceUtility {
      * @return {@link IBinder}
      */
     public static IBinder retrieve(@NotNull String pkg, @NotNull String cls) {
-        Log.d(TAG, "retrieve");
+        // Log.d(TAG, "retrieve");
 
         return getService(pkg, cls);
     }
@@ -155,7 +155,7 @@ public class ServiceUtility {
      * @param runnable {@link Runnable}
      */
     public static void execute(@NotNull Runnable runnable) {
-        Log.d(TAG, "execute");
+        // Log.d(TAG, "execute");
 
         new Thread() {
             @Override
@@ -184,7 +184,7 @@ public class ServiceUtility {
      * @param callback {@link ServiceUtility.Callback}
      */
     public static void register(@NotNull String pkg, @NotNull String cls, Bundle extras, @NotNull Callback callback) {
-        Log.d(TAG, "register");
+        // Log.d(TAG, "register");
 
         new Thread() {
             @Override
@@ -199,9 +199,6 @@ public class ServiceUtility {
                     if ((index = search(cls)) >= 0) {
                         return; // TODO: add `callback` instance to the list!?
                     }
-
-                    Log.d(TAG, "cls [" + cls + "]");
-                    Log.d(TAG, "pkg [" + pkg + "]");
 
                     Context context = Application.getPackageContext();
 
@@ -293,7 +290,7 @@ public class ServiceUtility {
      * @param cls service class name
      */
     public static void unregister(@NotNull String pkg, @NotNull String cls) {
-        Log.d(TAG, "unregister");
+        // Log.d(TAG, "unregister");
 
         sSemaphore.acquireUninterruptibly();
 

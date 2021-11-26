@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [1.0.5] - 2021-11-26
+- Update logs.
+
 ## [1.0.4] - 2021-11-16
 - Update logs.
 
