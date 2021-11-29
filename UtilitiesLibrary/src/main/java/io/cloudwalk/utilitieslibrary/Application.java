@@ -6,17 +6,14 @@ import androidx.lifecycle.ProcessLifecycleOwner;
 
 import io.cloudwalk.loglibrary.Log;
 
-public class Application extends android.app.Application {
+public class Application extends io.cloudwalk.loglibrary.Application {
     private static final String
             TAG = Application.class.getSimpleName();
 
-    private static Context
-            sPackageContext = null;
-
     public static Context getPackageContext() {
-        Log.d(TAG, "getPackageContext");
+        // Log.d(TAG, "getPackageContext");
 
-        return Application.sPackageContext;
+        return io.cloudwalk.loglibrary.Application.getPackageContext();
     }
 
     @Override
@@ -28,7 +25,5 @@ public class Application extends android.app.Application {
         LifecycleObserver lifecycleObserver = new LifecycleObserver();
 
         ProcessLifecycleOwner.get().getLifecycle().addObserver(lifecycleObserver);
-
-        Application.sPackageContext = getApplicationContext();
     }
 }

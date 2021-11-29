@@ -205,7 +205,7 @@ public class ServiceUtility {
                     ServiceConnection serviceConnection = new ServiceConnection() {
                         @Override
                         public void onServiceConnected(ComponentName name, IBinder service) {
-                            Log.d(TAG, "onServiceConnected::name [" + name.getClassName() + "]");
+                            // Log.d(TAG, "onServiceConnected::name [" + name.getClassName() + "]");
 
                             setService(name, service, this);
 

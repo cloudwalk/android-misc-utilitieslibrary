@@ -8,14 +8,14 @@ def groupId = 'io.cloudwalk'
 def artifactId = 'utilitieslibrary'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion 22
-        targetSdkVersion 30
-        versionCode 6
-        versionName "1.0.5"
+        targetSdkVersion 31
+        versionCode 7
+        versionName "1.0.6"
 
         buildConfigField 'String', 'PACKAGE_ID', "\"${groupId}.${artifactId}\""
         buildConfigField 'int', 'VERSION_CODE', "${versionCode}"
@@ -47,8 +47,8 @@ android {
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'androidx.lifecycle:lifecycle-process:2.3.1'
-    implementation 'org.jetbrains:annotations:15.0'
-    implementation 'io.cloudwalk:loglibrary:1.0.2'
+    implementation 'org.jetbrains:annotations:16.0.1'
+    implementation 'io.cloudwalk:loglibrary:1.1.0'
 }
 
 afterEvaluate {

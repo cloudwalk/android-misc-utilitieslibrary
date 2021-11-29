@@ -34,6 +34,8 @@ public class DataUtility {
      * @return {@link JSONArray}
      */
     private static JSONArray getJSONArrayFromList(List list) {
+        // Log.d(TAG, "getJSONArrayFromList");
+
         JSONArray jsonArray = new JSONArray();
 
         for (Object object : list) {
@@ -67,6 +69,8 @@ public class DataUtility {
      * @return {@link JSONObject}
      */
     public static JSONObject getJSONObjectFromBundle(@NotNull Bundle input, boolean sort) {
+        // Log.d(TAG, "getJSONObjectFromBundle");
+
         List<String> keySet = new ArrayList<>(0);
 
         if (sort) {
@@ -107,6 +111,8 @@ public class DataUtility {
      * @return {@link String}
      */
     public static String digest(@NotNull String algorithm, @NotNull String input) {
+        // Log.d(TAG, "digest");
+
         StringBuilder output = new StringBuilder();
 
         try {
@@ -135,6 +141,8 @@ public class DataUtility {
      * @return {@link String}
      */
     public static String getHexStringFromByteArray(@NotNull byte[] input) {
+        // Log.d(TAG, "getHexStringFromByteArray");
+
         byte[] output = new byte[input.length * 2];
 
         for (int j = 0; j < input.length; j++) {
@@ -156,6 +164,8 @@ public class DataUtility {
      * @return {@link String}
      */
     public static String mask(@NotNull String input, int ll, int rr) {
+        // Log.d(TAG, "mask");
+
         String output = new String(input);
 
         if (ll < 0 || rr < 0) {
@@ -184,6 +194,8 @@ public class DataUtility {
      * @return {@code byte[]}
      */
     public static byte[] CRC16_XMODEM(byte[] input) {
+        // Log.d(TAG, "CRC16_XMODEM");
+
         int wCRCin = 0x0000;
         int wCPoly = 0x1021;
 
@@ -216,6 +228,8 @@ public class DataUtility {
      * @return {@code byte[]}
      */
     public static byte[] concatByteArray(byte[]... input) {
+        // Log.d(TAG, "concatByteArray");
+
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
         try {
@@ -239,6 +253,8 @@ public class DataUtility {
      * @return {@code byte}
      */
     public static byte[] getByteArrayFromHexString(String input) {
+        // Log.d(TAG, "getByteArrayFromHexString");
+
         int len = input.length();
 
         byte[] data = new byte[len / 2];
@@ -258,6 +274,8 @@ public class DataUtility {
      * @return {@code byte[]}
      */
     public static byte[] getByteArrayFromString(Charset charset, String input) {
+        // Log.d(TAG, "getByteArrayFromString");
+
         return input.getBytes(charset);
     }
 
@@ -269,6 +287,8 @@ public class DataUtility {
      * @return {@code byte[]}
      */
     public static byte[] getByteArrayFromString(String input) {
+        // Log.d(TAG, "getByteArrayFromString");
+
         return input.getBytes(UTF_8);
     }
 
@@ -279,11 +299,11 @@ public class DataUtility {
      * @return {@code byte[]}
      */
     public static byte[] trimByteArray(byte[] input) {
+        // Log.d(TAG, "trimByteArray");
+
         int i = input.length - 1;
 
-        while (i >= 0 && input[i] == 0) {
-            --i;
-        }
+        while (i >= 0 && input[i] == 0) { --i; }
 
         return Arrays.copyOf(input, i + 1);
     }
@@ -297,6 +317,8 @@ public class DataUtility {
      * @return {@code int}
      */
     public static int getIntFromByteArray(byte[] input, int length) {
+        // Log.d(TAG, "getIntFromByteArray");
+
         int output = 0;
 
         for (int i = length - 1, j = 0; i >= 0; i--, j++) {
@@ -315,6 +337,8 @@ public class DataUtility {
      * @return either the position of {@code needle} on the {@code haystack} or -1
      */
     public static int stringBinarySearch(@NotNull String[] haystack, @NotNull String needle) {
+        // Log.d(TAG, "stringBinarySearch");
+
         int left = 0, right = haystack.length - 1;
 
         while (left <= right) {

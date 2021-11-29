@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [1.0.6] - 2021-11-29
+- Update internal dependencies.
+
 ## [1.0.5] - 2021-11-26
 - Update logs.
 

@@ -18,7 +18,7 @@ public class AppCompatActivity extends androidx.appcompat.app.AppCompatActivity 
             mStopStatus = false;
 
     protected boolean wasPaused() {
-        Log.d(TAG, "wasPaused");
+        // Log.d(TAG, "wasPaused");
 
         boolean value;
 
@@ -32,7 +32,7 @@ public class AppCompatActivity extends androidx.appcompat.app.AppCompatActivity 
     }
 
     protected boolean wasStopped() {
-        Log.d(TAG, "wasStopped");
+        // Log.d(TAG, "wasStopped");
 
         boolean value;
 
