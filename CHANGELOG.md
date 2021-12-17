@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [1.0.8] - 2021-12-17
+- Update build tools.
+
 ## [1.0.7] - 2021-11-29
 - Update internal dependencies.
 
