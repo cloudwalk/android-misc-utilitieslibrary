@@ -1,7 +1,8 @@
 package io.cloudwalk.utilitieslibrary.utilities;
 
+import static android.content.Context.BIND_AUTO_CREATE;
+
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -57,18 +58,18 @@ public class ServiceUtility {
     /**
      * See {@link ServiceUtility#retrieve(String, String)}.
      */
-    private static IBinder getService(@NotNull String pkg, @NotNull String cls) {
-        // Log.d(TAG, "getService");
+    private static IBinder _getService(@NotNull String pkg, @NotNull String cls) {
+        // Log.d(TAG, "_getService");
 
-        IBinder service = null;
+        IBinder service   = null;
 
-        long timeout = 2750;
-        long timestamp = SystemClock.elapsedRealtime();
+        long    timeout   = 2750;
+        long    timestamp = SystemClock.elapsedRealtime();
 
         do {
             sSemaphore.acquireUninterruptibly();
 
-            int index = search(cls);
+            int index = _searchService(cls);
 
             if (index >= 0) {
                 service = mServiceList.get(index).getService();
@@ -92,8 +93,8 @@ public class ServiceUtility {
      * @param cls service full class name
      * @return index of the service in the list
      */
-    private static int search(String cls) {
-        // Log.d(TAG, "search");
+    private static int _searchService(String cls) {
+        // Log.d(TAG, "_searchService");
 
         for (int i = 0; i < mServiceList.size(); i++) {
             if (mServiceList.get(i).getComponentName().getClassName().equals(cls)) {
@@ -105,14 +106,108 @@ public class ServiceUtility {
     }
 
     /**
+     * Unbinds a service according to given {@code pkg} and {@code cls}, triggering previously
+     * registered connection {@code callback} in the process.
+     *
+     * @param pkg service package name
+     * @param cls service class name
+     * @param callback {@link ServiceUtility.Callback}
+     */
+    private static void _onFailure(String pkg, String cls, Callback callback) {
+        // Log.d(TAG, "_onFailure");
+
+        _unregister(pkg, cls);
+
+        new Thread() {
+            @Override
+            public void run() { super.run(); callback.onFailure(); }
+        }.start();
+    }
+
+    /**
+     * See {@link ServiceUtility#register(String, String, Bundle, Callback)}.
+     */
+    private static void _register(String pkg, String cls, Bundle extras, Callback callback) {
+        // Log.d(TAG, "_register");
+
+        _unregister(pkg, cls);
+
+        ServiceConnection serviceConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder binder) {
+                // Log.d(TAG, "onServiceConnected::name [" + name.getClassName() + "]");
+
+                _setService(name, binder, this);
+
+                new Thread() {
+                    @Override
+                    public void run() { super.run(); callback.onSuccess(); }
+                }.start();
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                Log.e(TAG, "onServiceDisconnected::name [" + name.getClassName() + "]");
+
+                _onFailure(pkg, cls, callback);
+            }
+
+            @Override
+            public void onBindingDied(ComponentName name) {
+                Log.e(TAG, "onBindingDied::name [" + name.getClassName() + "]");
+
+                _onFailure(pkg, cls, callback);
+            }
+        };
+
+        int count = 0;
+
+        mServiceList.add(new ServiceModel(new ComponentName(pkg, cls), null));
+
+        do {
+            Intent intent = new Intent();
+
+            if (intent.getExtras() == null && extras != null) {
+                intent.putExtras(extras);
+            }
+
+            if (count == 0) {
+                intent.setClassName(pkg, cls);
+            }
+
+            if (count == 1 || count == 3) {
+                break;
+            }
+
+            if (count == 2) {
+                intent.setAction(cls);
+
+                intent.setPackage(pkg);
+            }
+
+            if (count >= 4) {
+                mServiceList.remove(_searchService(cls));
+
+                Log.e(TAG, "Failed to bind to " + intent.getAction() + " (either not found or missing permission).");
+
+                _onFailure(pkg, cls, callback);
+
+                break;
+            }
+
+            count += (Application.getPackageContext().bindService(intent, serviceConnection, BIND_AUTO_CREATE)) ? 1 : 2;
+        } while (true);
+    }
+
+    /**
      * @param service {@link IBinder}
      */
-    private static void setService(ComponentName name, IBinder service, ServiceConnection serviceConnection) {
-        // Log.d(TAG, "setService");
+    private static void _setService(ComponentName name, IBinder service, ServiceConnection serviceConnection) {
+        // Log.d(TAG, "_setService");
 
         sSemaphore.acquireUninterruptibly();
 
-        int index = search(name.getClassName());
+        int index = _searchService(name.getClassName());
 
         if (index >= 0) {
             mServiceList.get(index).setComponentName(name);
@@ -126,6 +221,25 @@ public class ServiceUtility {
     }
 
     /**
+     * See {@link ServiceUtility#unregister(String, String)}.
+     */
+    private static void _unregister(String pkg, String cls) {
+        // Log.d(TAG, "_unregister");
+
+        int index = _searchService(cls);
+
+        if (index >= 0) {
+            ServiceConnection serviceConnection = mServiceList.get(index).getServiceConnection();
+
+            if (serviceConnection != null) {
+                Application.getPackageContext().unbindService(serviceConnection);
+            }
+
+            mServiceList.remove(index);
+        }
+    }
+
+    /**
      * Retrieves an instance of {@link IBinder} according to given {@code pkg} and {@code cls}.
      *
      * @param pkg service package name
@@ -135,7 +249,7 @@ public class ServiceUtility {
     public static IBinder retrieve(@NotNull String pkg, @NotNull String cls) {
         // Log.d(TAG, "retrieve");
 
-        return getService(pkg, cls);
+        return _getService(pkg, cls);
     }
 
     /**
@@ -159,11 +273,7 @@ public class ServiceUtility {
 
         new Thread() {
             @Override
-            public void run() {
-                super.run();
-
-                runnable.run();
-            }
+            public void run() { super.run(); runnable.run(); }
         }.start();
     }
 
@@ -171,7 +281,22 @@ public class ServiceUtility {
      * See {@link ServiceUtility#register(String, String, Bundle, Callback)}.
      */
     public static void register(@NotNull String pkg, @NotNull String cls, @NotNull Callback callback) {
-        register(pkg, cls, null, callback);
+        // Log.d(TAG, "register");
+
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+
+                try {
+                    sSemaphore.acquireUninterruptibly();
+
+                    _register(pkg, cls, null, callback);
+                } finally {
+                    sSemaphore.release();
+                }
+            }
+        }.start();
     }
 
     /**
@@ -191,93 +316,12 @@ public class ServiceUtility {
             public void run() {
                 super.run();
 
-                int index = -1;
-
-                sSemaphore.acquireUninterruptibly();
-
                 try {
-                    if ((index = search(cls)) >= 0) {
-                        return; // TODO: add `callback` instance to the list!?
-                    }
+                    sSemaphore.acquireUninterruptibly();
 
-                    Context context = Application.getPackageContext();
-
-                    ServiceConnection serviceConnection = new ServiceConnection() {
-                        @Override
-                        public void onServiceConnected(ComponentName name, IBinder service) {
-                            // Log.d(TAG, "onServiceConnected::name [" + name.getClassName() + "]");
-
-                            setService(name, service, this);
-
-                            callback.onSuccess();
-                        }
-
-                        @Override
-                        public void onServiceDisconnected(ComponentName name) {
-                            Log.e(TAG, "onServiceDisconnected::name [" + name.getClassName() + "]");
-
-                            unregister(pkg, cls);
-
-                            callback.onFailure();
-                        }
-
-                        @Override
-                        public void onBindingDied(ComponentName name) {
-                            Log.e(TAG, "onBindingDied::name [" + name.getClassName() + "]");
-
-                            unregister(pkg, cls);
-
-                            callback.onFailure();
-                        }
-                    };
-
-                    int count = 0;
-
-                    mServiceList.add(new ServiceModel(new ComponentName(pkg, cls), null));
-
-                    do {
-                        Intent intent = new Intent();
-
-                        if (intent.getExtras() == null && extras != null) {
-                            intent.putExtras(extras);
-                        }
-
-                        if (count == 0) {
-                            intent.setClassName(pkg, cls);
-                        }
-
-                        if (count == 1 || count == 3) {
-                            break;
-                        }
-
-                        if (count == 2) {
-                            intent.setAction(cls);
-
-                            intent.setPackage(pkg);
-                        }
-
-                        if (count >= 4) {
-                            mServiceList.remove(search(cls));
-
-                            Log.e(TAG, "Failed to bind to " + intent.getAction() + " (either not found or missing permission).");
-
-                            callback.onFailure();
-
-                            break;
-                        }
-
-                        count += (context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)) ? 1 : 2;
-                    } while (true);
+                    _register(pkg, cls, extras, callback);
                 } finally {
                     sSemaphore.release();
-
-                    if (index >= 0) {
-                        if (retrieve(pkg, cls) != null) {
-                            callback.onSuccess();
-                        } else {
-                            callback.onFailure();
-                        }
-                    }
                 }
             }
         }.start();
@@ -292,22 +336,19 @@ public class ServiceUtility {
     public static void unregister(@NotNull String pkg, @NotNull String cls) {
         // Log.d(TAG, "unregister");
 
-        sSemaphore.acquireUninterruptibly();
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
 
-        Context context = Application.getPackageContext();
+                try {
+                    sSemaphore.acquireUninterruptibly();
 
-        int index = search(cls);
-
-        if (index >= 0) {
-            ServiceConnection serviceConnection = mServiceList.get(index).getServiceConnection();
-
-            if (serviceConnection != null) {
-                context.unbindService(serviceConnection);
+                    _unregister(pkg, cls);
+                } finally {
+                    sSemaphore.release();
+                }
             }
-
-            mServiceList.remove(index);
-        }
-
-        sSemaphore.release();
+        }.start();
     }
 }

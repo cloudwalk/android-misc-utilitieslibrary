@@ -33,14 +33,14 @@ public class DataUtility {
      * @param list {@link List}
      * @return {@link JSONArray}
      */
-    private static JSONArray getJSONArrayFromList(List list) {
-        // Log.d(TAG, "getJSONArrayFromList");
+    private static JSONArray _getJSONArrayFromList(List list) {
+        // Log.d(TAG, "_getJSONArrayFromList");
 
         JSONArray jsonArray = new JSONArray();
 
         for (Object object : list) {
             if (object instanceof List) {
-                jsonArray.put(getJSONArrayFromList((List) object));
+                jsonArray.put(_getJSONArrayFromList((List) object));
             } else if (object instanceof Bundle) {
                 jsonArray.put(getJSONObjectFromBundle((Bundle) object));
             } else {
@@ -88,7 +88,7 @@ public class DataUtility {
                 if (item instanceof Bundle) {
                     output.put(key, getJSONObjectFromBundle((Bundle) item, sort));
                 } else if (item instanceof List) {
-                    output.put(key, getJSONArrayFromList((List) item));
+                    output.put(key, _getJSONArrayFromList((List) item));
                 } else {
                     output.put(key, item);
                 }

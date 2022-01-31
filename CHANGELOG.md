@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [1.0.9] - 2022-01-28
+- Turn bug into feature: so far, all service connection attempts following a
+  successful one would silently be dropped. From now on, each attempt will
+  internally trigger `ServiceUtility#unregister(String, String)`, to ensure
+  proper feedback.
+- Update code patterns and internal dependencies.
+
 ## [1.0.8] - 2021-12-17
 - Update build tools.
 
