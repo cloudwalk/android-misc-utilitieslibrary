@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [1.0.10] - 2022-02-01
+- Ensure `ServiceUtility#unregister(String, String)` will run synchronously.
+
 ## [1.0.9] - 2022-01-28
 - Turn bug into feature: so far, all service connection attempts following a
   successful one would silently be dropped. From now on, each attempt will
