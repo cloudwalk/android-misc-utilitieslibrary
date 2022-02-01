@@ -63,7 +63,7 @@ public class ServiceUtility {
 
         IBinder service   = null;
 
-        long    timeout   = 2750;
+        long    timeout   = 1000;
         long    timestamp = SystemClock.elapsedRealtime();
 
         do {
@@ -96,13 +96,23 @@ public class ServiceUtility {
     private static int _searchService(String cls) {
         // Log.d(TAG, "_searchService");
 
+        int index = -1;
+
         for (int i = 0; i < mServiceList.size(); i++) {
             if (mServiceList.get(i).getComponentName().getClassName().equals(cls)) {
-                return i;
+                index = i;
+            }
+
+            // Log.d(TAG, "_searchService::mServiceList.get(i).getComponentName().getClassName() [" + mServiceList.get(i).getComponentName().getClassName() + "]");
+
+            if (index != -1) {
+                break;
             }
         }
 
-        return -1;
+        // Log.d(TAG, "_searchService::index [" + index + "]");
+
+        return index;
     }
 
     /**
@@ -205,19 +215,21 @@ public class ServiceUtility {
     private static void _setService(ComponentName name, IBinder service, ServiceConnection serviceConnection) {
         // Log.d(TAG, "_setService");
 
-        sSemaphore.acquireUninterruptibly();
+        try {
+            sSemaphore.acquireUninterruptibly();
 
-        int index = _searchService(name.getClassName());
+            int index = _searchService(name.getClassName());
 
-        if (index >= 0) {
-            mServiceList.get(index).setComponentName(name);
+            if (index >= 0) {
+                mServiceList.get(index).setComponentName(name);
 
-            mServiceList.get(index).setService(service);
+                mServiceList.get(index).setService(service);
 
-            mServiceList.get(index).setServiceConnection(serviceConnection);
+                mServiceList.get(index).setServiceConnection(serviceConnection);
+            }
+        } finally {
+            sSemaphore.release();
         }
-
-        sSemaphore.release();
     }
 
     /**
@@ -234,6 +246,8 @@ public class ServiceUtility {
             if (serviceConnection != null) {
                 Application.getPackageContext().unbindService(serviceConnection);
             }
+
+            // Log.d(TAG, "_unregister::remove [" + index + "]");
 
             mServiceList.remove(index);
         }
@@ -336,19 +350,12 @@ public class ServiceUtility {
     public static void unregister(@NotNull String pkg, @NotNull String cls) {
         // Log.d(TAG, "unregister");
 
-        new Thread() {
-            @Override
-            public void run() {
-                super.run();
+        try {
+            sSemaphore.acquireUninterruptibly();
 
-                try {
-                    sSemaphore.acquireUninterruptibly();
-
-                    _unregister(pkg, cls);
-                } finally {
-                    sSemaphore.release();
-                }
-            }
-        }.start();
+            _unregister(pkg, cls);
+        } finally {
+            sSemaphore.release();
+        }
     }
 }
