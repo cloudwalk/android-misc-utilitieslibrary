@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [1.0.11] - 2022-03-18
+- Completely remove incomplete support to package lifecycle observers.
+
 ## [1.0.10] - 2022-02-01
 - Ensure `ServiceUtility#unregister(String, String)` will run synchronously.
 
