@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [1.0.12] - 2022-03-dd
+- Replace `Application#getPackageContext()` by `Application#getContext()`.
+
 ## [1.0.11] - 2022-03-18
 - Completely remove incomplete support to package lifecycle observers.
 

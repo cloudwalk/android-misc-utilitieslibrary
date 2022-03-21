@@ -205,7 +205,7 @@ public class ServiceUtility {
                 break;
             }
 
-            count += (Application.getPackageContext().bindService(intent, serviceConnection, BIND_AUTO_CREATE)) ? 1 : 2;
+            count += (Application.getContext().bindService(intent, serviceConnection, BIND_AUTO_CREATE)) ? 1 : 2;
         } while (true);
     }
 
@@ -244,7 +244,7 @@ public class ServiceUtility {
             ServiceConnection serviceConnection = mServiceList.get(index).getServiceConnection();
 
             if (serviceConnection != null) {
-                Application.getPackageContext().unbindService(serviceConnection);
+                Application.getContext().unbindService(serviceConnection);
             }
 
             // Log.d(TAG, "_unregister::remove [" + index + "]");
