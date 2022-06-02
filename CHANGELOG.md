@@ -1,6 +1,13 @@
 # CHANGELOG
 
-## [1.0.12] - 2022-03-dd
+## [1.0.13] - 2022-MM-DD
+- Optimize `DataUtility#getIntFromByteArray(byte, int)`.
+- Overload `byte` API to allow partial conversion:  
+  - `DataUtility#getHexStringFromByteArray(byte, int, int)`
+  - `DataUtility#getIntFromByteArray(byte, int, int)`
+- Review CHANGELOG.md content.
+
+## [1.0.12] - 2022-03-21
 - Replace `Application#getPackageContext()` by `Application#getContext()`.
 
 ## [1.0.11] - 2022-03-18
@@ -39,7 +46,7 @@
 - Update inner conversion from `int` to `byte[]` at `CRC16_XMODEM(byte[])`.
 
 ## [1.0.1] - 2021-10-04
-- Update dependency list to shrink final package.
+- Erase unused dependencies from the dependency list.
 
 ## [1.0.0] - 2021-09-30
 - Initial release.
