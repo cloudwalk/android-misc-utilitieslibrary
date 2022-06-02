@@ -26,5 +26,5 @@ build variant only.
 
 Due to `io.cloudwalk.utilitieslibrary` dependency on `io.cloudwalk.loglibrary`
 it carries all of its disclosures. Be sure to check its
-[README.md](https://github.com/mauriciospinardi/android-misc-loglibrary/README.md)
+[README.md](https://github.com/mauriciospinardi/android-misc-loglibrary/blob/main/README.md)
 for further details.  

@@ -164,9 +164,8 @@ public class DataUtility {
 
         if (length > offset) {
             byte[] response = new byte[length * 2];
-            int    boundary = Math.min(length, input.length);
 
-            for (int i = offset, j = 0; i < boundary; i++, j++) {
+            for (int i = offset, j = 0; i < length; i++, j++) {
                 int value = input[i] & 0xFF;
 
                 response[j * 2]     = reference[value >>> 0x04];
@@ -361,7 +360,7 @@ public class DataUtility {
     public static int getIntFromByteArray(byte[] input, int length, int offset) {
         // Log.d(TAG, "getIntFromByteArray");
 
-        int response = -1;
+        int response = 0;
 
         length = Math.max(length, 0);
         length = Math.min(length, input.length);
