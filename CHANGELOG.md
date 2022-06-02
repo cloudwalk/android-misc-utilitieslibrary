@@ -1,7 +1,8 @@
 # CHANGELOG
 
 ## [1.0.13] - 2022-MM-DD
-- Optimize `DataUtility#getIntFromByteArray(byte, int)`.
+- Repurpose `DataUtility#getIntFromByteArray(byte, int)` to consider the pure
+  value of each byte in the input array.
 - Overload `byte` API to allow partial conversion:  
   - `DataUtility#getHexStringFromByteArray(byte, int, int)`
   - `DataUtility#getIntFromByteArray(byte, int, int)`
