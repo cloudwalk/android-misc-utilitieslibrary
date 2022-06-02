@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [1.0.13] - 2022-MM-DD
+## [1.0.13] - 2022-06-03
 - Repurpose `DataUtility#getIntFromByteArray(byte, int)` to consider the pure
   value of each byte in the input array.
 - Overload `byte` API to allow partial conversion:  
