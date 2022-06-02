@@ -8,8 +8,8 @@ features for easier maintenance and reusage.
 ## Local dependencies
 
 Local dependencies are those which are _private_, but within the scope of the
-Utilities Library development team. They need to be made available locally
-before the library can be built:  
+`io.cloudwalk.utilitieslibrary` development team. They need to be made
+available locally before the library can be built:  
 
 1. Clone the repository [android-misc-loglibrary](https://github.com/mauriciospinardi/android-misc-loglibrary)
 2. Follow the instructions to [locally publish](#local-publishing) it.
