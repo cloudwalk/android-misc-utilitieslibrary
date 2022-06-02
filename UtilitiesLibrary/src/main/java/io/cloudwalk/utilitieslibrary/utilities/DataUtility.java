@@ -24,9 +24,6 @@ public class DataUtility {
     private static final String
             TAG = DataUtility.class.getSimpleName();
 
-    private static final byte[]
-            HEX_ARRAY = "0123456789ABCDEF".getBytes(StandardCharsets.US_ASCII);
-
     /**
      * Converts given {@link List} to {@link JSONArray}.
      *
@@ -79,27 +76,27 @@ public class DataUtility {
             Collections.sort(keySet);
         }
 
-        JSONObject output = new JSONObject();
+        JSONObject response = new JSONObject();
 
         for (String key : (sort) ? keySet : input.keySet()) {
             try {
                 Object item = input.get(key);
 
                 if (item instanceof Bundle) {
-                    output.put(key, getJSONObjectFromBundle((Bundle) item, sort));
+                    response.put(key, getJSONObjectFromBundle((Bundle) item, sort));
                 } else if (item instanceof List) {
-                    output.put(key, _getJSONArrayFromList((List) item));
+                    response.put(key, _getJSONArrayFromList((List) item));
                 } else {
-                    output.put(key, item);
+                    response.put(key, item);
                 }
             } catch (Exception exception) {
                 Log.e(TAG, Log.getStackTraceString(exception));
 
-                output = null;
+                response = null;
             }
         }
 
-        return output;
+        return response;
     }
 
     /**
@@ -113,7 +110,7 @@ public class DataUtility {
     public static String digest(@NotNull String algorithm, @NotNull String input) {
         // Log.d(TAG, "digest");
 
-        StringBuilder output = new StringBuilder();
+        StringBuilder response = new StringBuilder();
 
         try {
             MessageDigest messageDigest = MessageDigest.getInstance(algorithm);
@@ -125,13 +122,13 @@ public class DataUtility {
             byte[] byteDigest = messageDigest.digest();
 
             for (int i = 0; i < byteDigest.length; i++) {
-                output.append(Integer.toString(( byteDigest[i] & 0xFF ) + 0x100, 16).substring(1));
+                response.append(Integer.toString(( byteDigest[i] & 0xFF ) + 0x100, 16).substring(1));
             }
         } catch (Exception exception) {
             Log.e(TAG, Log.getStackTraceString(exception));
         }
 
-        return output.toString();
+        return response.toString();
     }
 
     /**
@@ -143,15 +140,44 @@ public class DataUtility {
     public static String getHexStringFromByteArray(@NotNull byte[] input) {
         // Log.d(TAG, "getHexStringFromByteArray");
 
-        byte[] output = new byte[input.length * 2];
+        return getHexStringFromByteArray(input, input.length, 0);
+    }
 
-        for (int j = 0; j < input.length; j++) {
-            int value = input[j] & 0xFF;
-            output[j * 2] = HEX_ARRAY[value >>> 4];
-            output[j * 2 + 1] = HEX_ARRAY[value & 0x0F];
+    /**
+     * Extended version of {@link DataUtility#getHexStringFromByteArray(byte[])} for partial
+     * conversion.
+     *
+     * @param input {@code byte} array
+     * @param length self-describing
+     * @param offset self-describing
+     * @return {@link String}
+     */
+    private static String getHexStringFromByteArray(@NotNull byte[] input, int length, int offset) {
+        // Log.d(TAG, "getHexStringFromByteArray");
+
+        final byte[] reference = "0123456789ABCDEF".getBytes(StandardCharsets.US_ASCII);
+
+        length = Math.max(length, 0);
+        length = Math.min(length, input.length);
+
+        offset = Math.max(offset, 0);
+
+        if (length > offset) {
+            byte[] response = new byte[length * 2];
+
+            for (int i = offset, j = 0; i < length; i++, j++) {
+                int value = input[i] & 0xFF;
+
+                response[j * 2]     = reference[value >>> 0x04];
+                response[j * 2 + 1] = reference[value &   0x0F];
+            }
+
+            return new String(response, UTF_8);
+        } else {
+            Log.e(TAG, String.format(US, "_getHexStringFromByteArray::input.length [%d] length [%d] offset [%d]", input.length, length, offset));
         }
 
-        return new String(output, UTF_8);
+        return "";
     }
 
     /**
@@ -166,25 +192,25 @@ public class DataUtility {
     public static String mask(@NotNull String input, int ll, int rr) {
         // Log.d(TAG, "mask");
 
-        String output = new String(input);
+        String response = new String(input);
 
         if (ll < 0 || rr < 0) {
-            return output;
+            return response;
         }
 
-        if ((output.length() - ll - rr) <= 0) {
-            return output;
+        if ((response.length() - ll - rr) <= 0) {
+            return response;
         }
 
-        for (int i = ll; i < output.length() - rr; i++) {
-            char candidate = output.charAt(i);
+        for (int i = ll; i < response.length() - rr; i++) {
+            char candidate = response.charAt(i);
 
             if (candidate != ' ') {
-                output = output.substring(0, i) + '*' + output.substring(i + 1);
+                response = response.substring(0, i) + '*' + response.substring(i + 1);
             }
         }
 
-        return output;
+        return response;
     }
 
     /**
@@ -260,7 +286,7 @@ public class DataUtility {
         byte[] data = new byte[len / 2];
 
         for (int i = 0; i < len; i += 2) {
-            data[i / 2] = (byte) ((Character.digit(input.charAt(i), 16) << 4) + Character.digit(input.charAt(i+1), 16));
+            data[i / 2] = (byte) ((Character.digit(input.charAt(i), 16) << 4) + Character.digit(input.charAt(i + 1), 16));
         }
 
         return data;
@@ -319,13 +345,33 @@ public class DataUtility {
     public static int getIntFromByteArray(byte[] input, int length) {
         // Log.d(TAG, "getIntFromByteArray");
 
-        int output = 0;
+        return getIntFromByteArray(input, length, 0);
+    }
 
-        for (int i = length - 1, j = 0; i >= 0; i--, j++) {
-            output += (input[j] - 0x30) * ((i > 0) ? (Math.pow(10, i)) : 1);
+    /**
+     * Extended version of {@link DataUtility#getIntFromByteArray(byte[], int)} for partial
+     * conversion.
+     *
+     * @param input {@code byte} array
+     * @param length self-describing
+     * @param offset self-describing
+     * @return {@code int}
+     */
+    public static int getIntFromByteArray(byte[] input, int length, int offset) {
+        // Log.d(TAG, "getIntFromByteArray");
+
+        int response = 0;
+
+        length = Math.max(length, 0);
+        length = Math.min(length, input.length);
+
+        offset = Math.max(offset, 0);
+
+        for (int i = offset; i < length; i++) {
+            response = (response << 8) + (input[i] & 0xFF);
         }
 
-        return output;
+        return response;
     }
 
     /**

@@ -80,7 +80,7 @@ public class ServiceUtility {
             if (index < 0 || service != null) {
                 break;
             } else {
-                SystemClock.sleep(timeout / 10);
+                SystemClock.sleep(timeout / 3);
             }
         } while ((timestamp + timeout) >= SystemClock.elapsedRealtime());
 
