@@ -36,10 +36,10 @@ public class DataUtility {
         JSONArray jsonArray = new JSONArray();
 
         for (Object object : list) {
-            if (object instanceof List) {
-                jsonArray.put(_getJSONArrayFromList((List) object));
-            } else if (object instanceof Bundle) {
+            if (object instanceof Bundle) {
                 jsonArray.put(getJSONObjectFromBundle((Bundle) object));
+            } else if (object instanceof List) {
+                jsonArray.put(_getJSONArrayFromList((List) object));
             } else {
                 jsonArray.put(object);
             }
@@ -59,7 +59,9 @@ public class DataUtility {
     }
 
     /**
-     * Converts given {@link Bundle} to {@link JSONObject}.
+     * Converts given {@link Bundle} to {@link JSONObject}.<br>
+     * Bear in mind, as Harold L. points out: "The JSON spec. says you CAN escape forward slash, but
+     * you don't have to". In other words, {@code //} will be outputted as {@code \/\/}.
      *
      * @param input {@link Bundle}
      * @param sort indicates whether the collection of keys must be sorted lexicographically
@@ -137,7 +139,7 @@ public class DataUtility {
      * @param input {@code byte} array
      * @return {@link String}
      */
-    public static String getHexStringFromByteArray(@NotNull byte[] input) {
+    public static String getHexStringFromByteArray(byte[] input) {
         // Log.d(TAG, "getHexStringFromByteArray");
 
         return getHexStringFromByteArray(input, input.length, 0);
@@ -152,7 +154,7 @@ public class DataUtility {
      * @param offset self-describing
      * @return {@link String}
      */
-    private static String getHexStringFromByteArray(@NotNull byte[] input, int length, int offset) {
+    public static String getHexStringFromByteArray(byte[] input, int length, int offset) {
         // Log.d(TAG, "getHexStringFromByteArray");
 
         final byte[] reference = "0123456789ABCDEF".getBytes(StandardCharsets.US_ASCII);
@@ -163,7 +165,7 @@ public class DataUtility {
         offset = Math.max(offset, 0);
 
         if (length > offset) {
-            byte[] response = new byte[length * 2];
+            byte[] response = new byte[(length - offset) * 2];
 
             for (int i = offset, j = 0; i < length; i++, j++) {
                 int value = input[i] & 0xFF;
