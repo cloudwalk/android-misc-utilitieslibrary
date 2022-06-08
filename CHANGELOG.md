@@ -1,9 +1,10 @@
 # CHANGELOG
 
-## [1.0.14] - 2022-06-07
-- Update `DataUtility#getHexStringFromByteArray(byte, int, int)` method modifier
-  from `private` to `public`.
-- Remove annotations from primitives. 
+## [1.0.14] - 2022-06-08
+- Update `DataUtility#getHexStringFromByteArray(byte, int, int)` modifier from
+  `private` to `public`.
+- Remove annotations from primitives.
+- Update documentation.
 
 ## [1.0.13] - 2022-06-03
 - Repurpose `DataUtility#getIntFromByteArray(byte, int)` to consider the pure

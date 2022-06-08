@@ -36,10 +36,10 @@ public class DataUtility {
         JSONArray jsonArray = new JSONArray();
 
         for (Object object : list) {
-            if (object instanceof List) {
-                jsonArray.put(_getJSONArrayFromList((List) object));
-            } else if (object instanceof Bundle) {
+            if (object instanceof Bundle) {
                 jsonArray.put(getJSONObjectFromBundle((Bundle) object));
+            } else if (object instanceof List) {
+                jsonArray.put(_getJSONArrayFromList((List) object));
             } else {
                 jsonArray.put(object);
             }
@@ -59,7 +59,9 @@ public class DataUtility {
     }
 
     /**
-     * Converts given {@link Bundle} to {@link JSONObject}.
+     * Converts given {@link Bundle} to {@link JSONObject}.<br>
+     * Bear in mind, as Harold L. points out: "The JSON spec. says you CAN escape forward slash, but
+     * you don't have to". In other words, {@code //} will be outputted as {@code \/\/}.
      *
      * @param input {@link Bundle}
      * @param sort indicates whether the collection of keys must be sorted lexicographically
