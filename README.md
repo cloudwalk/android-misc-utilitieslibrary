@@ -2,15 +2,15 @@
 
 <img src="SHIELD.svg"/><br/>
 
-Several projects share the same fundamental requirements. These are usually
-detached from business logic, such as data type conversions or recurrent
-queries to the OS. `io.cloudwalk.utilitieslibrary` centralizes these basic
-features for easier maintenance and reusage.  
+Several projects share the same fundamental requirements, usually detached from
+business logic, such as data type conversions or recurrent queries to the OS.  
+`io.cloudwalk.utilitieslibrary` centralizes these basic features for easier
+maintenance and reusage.  
 
 ## Project dependencies
 
-Due to its very fundamental scope, `io.cloudwalk.utilitieslibrary` was designed
-to be independent of copyrighted[^1] packages. However, there are
+`io.cloudwalk.utilitieslibrary` was designed to be independent of
+copyrighted[^1] packages. However, there are
 [local dependencies](#local-dependencies) to be taken into account.  
 
 [^1]: Those provided by third parties, usually under NDA.
@@ -22,7 +22,7 @@ Local dependencies are those within the scope of the
 available before the library can be built:  
 
 1. Clone the repository [android-misc-loglibrary](https://github.com/mauriciospinardi/android-misc-loglibrary)
-2. Follow the instructions to [locally publish](#local-publishing) it.
+2. Follow the instructions in its README.md to locally publish it.
 
 ## Local publishing
 
