@@ -77,7 +77,7 @@ public class ServiceUtility {
 
             sSemaphore.release();
 
-            if (index < 0 || service != null) {
+            if (index < 0 || service != null) { // TODO: remove loop?!
                 break;
             } else {
                 SystemClock.sleep(timeout / 3);
