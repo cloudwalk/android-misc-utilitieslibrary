@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [1.1.0] - YYYY-MM-DD
+- Replace `DataUtility` by `BundleUtility`, `ByteUtility` and `StringUtility`.
+
 ## [1.0.14] - 2022-06-08
 - Update `DataUtility#getHexStringFromByteArray(byte, int, int)` modifier from
   `private` to `public`.
