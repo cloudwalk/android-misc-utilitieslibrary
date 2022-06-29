@@ -27,7 +27,7 @@ public class ByteUtility {
 
         int offset = 0;
 
-        return getHexString(input, length, offset);
+        return getHexString(input, offset, length);
     }
 
     /**
@@ -36,11 +36,11 @@ public class ByteUtility {
      * internally to fall between {@code 0} and {@code input.length}.
      *
      * @param input {@code byte} array
-     * @param length self-describing
      * @param offset self-describing
+     * @param length self-describing
      * @return {@code int}
      */
-    public static String getHexString(byte[] input, int length, int offset) {
+    public static String getHexString(byte[] input, int offset, int length) {
         // Log.d(TAG, "getHexString");
 
         final byte[] reference = "0123456789ABCDEF".getBytes(StandardCharsets.US_ASCII);
@@ -118,7 +118,7 @@ public class ByteUtility {
         // Log.d(TAG, "clear");
 
         if (input != null) {
-            return clear(input, input.length, 0);
+            return clear(input, 0, input.length);
         } else {
             return null;
         }
@@ -130,11 +130,11 @@ public class ByteUtility {
      * internally to fall between {@code 0} and {@code input.length}.
      *
      * @param input {@code byte[]}
-     * @param length self-describing
      * @param offset self-describing
+     * @param length self-describing
      * @return {@code byte[]}
      */
-    public static byte[] clear(byte[] input, int length, int offset) {
+    public static byte[] clear(byte[] input, int offset, int length) {
         // Log.d(TAG, "clear");
 
         if (input != null) {
@@ -146,7 +146,7 @@ public class ByteUtility {
             if (length > offset) {
                 Arrays.fill(input, offset, length, (byte) 0x00);
             } else {
-                Log.e(TAG, String.format(US, "clear::input.length [%d] length [%d] offset [%d]", input.length, length, offset));
+                Log.e(TAG, String.format(US, "clear::input.length [%d] offset [%d] length [%d]", input.length, offset, length));
             }
         }
 
@@ -154,19 +154,19 @@ public class ByteUtility {
     }
 
     /**
-     * XMODEM CRC16, often falsely identified as CCITT CRC.
+     * XMODEM CRC16, often falsely identified as CCITT CRC16.
      * See <a href="https://reveng.sourceforge.io/crc-catalogue/16.htm">https://reveng.sourceforge.io/crc-catalogue/16.htm</a> and
      * <a href="https://bit.ly/3xY5mAv">https://bit.ly/3xY5mAv</a> for further details.
      *
      * @param input {@code byte[]}
-     * @param length self-describing
      * @param offset self-describing
+     * @param length self-describing
      * @return {@code byte[]}
      * @throws Exception {@link IllegalArgumentException} if arguments are invalid
      */
-    public static byte[] crc(byte[] input, int length, int offset)
-            throws Exception { // TODO: foresee additional CRC types - e.g. crc(<enum_type>, byte[], ...)
-        // Log.d(TAG, "crc");
+    public static byte[] crc16(byte[] input, int offset, int length)
+            throws Exception { // TODO: foresee additional CRC types - e.g. crc16(<enum_type>, byte[], ...)
+        // Log.d(TAG, "crc16");
 
         if (length < 0) {
             throw new IllegalArgumentException("length < 0");
@@ -290,11 +290,11 @@ public class ByteUtility {
      * internally to fall between {@code 0} and {@code input.length}.
      *
      * @param input {@code byte} array
-     * @param length self-describing
      * @param offset self-describing
+     * @param length self-describing
      * @return {@code int}
      */
-    public static int getInt(byte[] input, int length, int offset) {
+    public static int getInt(byte[] input, int offset, int length) {
         // Log.d(TAG, "getInt");
 
         int response = 0;

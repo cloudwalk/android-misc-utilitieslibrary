@@ -49,7 +49,7 @@ public class DataUtility {
     }
 
     /**
-     * @deprecated As of release 1.1.0, replaced by {@link ByteUtility#getHexString(byte[], int)}.
+     * @deprecated As of release 1.1.0, replaced by {@link ByteUtility#getHexString(byte[], int, int)}.
      */
     @Deprecated
     public static String getHexStringFromByteArray(byte[] input, int length, int offset) {
@@ -65,15 +65,17 @@ public class DataUtility {
     }
 
     /**
-     * @deprecated As of release 1.1.0, replaced by {@link ByteUtility#crc(byte[], int, int)}.
+     * @deprecated As of release 1.1.0, replaced by {@link ByteUtility#crc16(byte[], int, int)}.
      */
     @Deprecated
     public static byte[] CRC16_XMODEM(byte[] input) {
+        byte[] response = null;
+
         try {
-            return ByteUtility.crc(input, input.length, 0);
-        } catch (Exception exception) {
-            return null;
-        }
+            response = ByteUtility.crc16(input, input.length, 0);
+        } catch (Exception ignored) { }
+
+        return response;
     }
 
     /**
