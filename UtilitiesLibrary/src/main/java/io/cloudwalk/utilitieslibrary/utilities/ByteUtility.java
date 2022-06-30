@@ -89,6 +89,24 @@ public class ByteUtility {
     }
 
     /**
+     * Same as {@link ByteUtility#clear(ByteArrayOutputStream)}.
+     *
+     * @param input {@code {@link ByteArrayOutputStream}[]}
+     * @return {@code null}
+     */
+    public static byte[] clear(ByteArrayOutputStream[] input) {
+        // Log.d(TAG, "clear");
+
+        if (input != null) {
+            for (int i = 0; i < input.length; i++) {
+                clear(input[i]);
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * {@link ByteUtility#clear(ByteArrayOutputStream)} extended.<br>
      * Implementation is permissive: {@code size} may be lower than {@code 0} (in which case, no
      * clearing will be done).
@@ -122,6 +140,24 @@ public class ByteUtility {
         } else {
             return null;
         }
+    }
+
+    /**
+     * Same as {@link ByteUtility#clear(byte[])}.
+     *
+     * @param input {@code byte[]...}
+     * @return {@code null}
+     */
+    public static byte[] clear(byte[]... input) {
+        // Log.d(TAG, "clear");
+
+        if (input != null) {
+            for (byte[] entry : input) {
+                clear(entry);
+            }
+        }
+
+        return null;
     }
 
     /**
