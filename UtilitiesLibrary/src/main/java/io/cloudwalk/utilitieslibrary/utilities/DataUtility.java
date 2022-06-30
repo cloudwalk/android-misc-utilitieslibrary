@@ -53,7 +53,7 @@ public class DataUtility {
      */
     @Deprecated
     public static String getHexStringFromByteArray(byte[] input, int length, int offset) {
-        return ByteUtility.getHexString(input, input.length, offset);
+        return ByteUtility.getHexString(input, offset, length);
     }
 
     /**
@@ -72,7 +72,7 @@ public class DataUtility {
         byte[] response = null;
 
         try {
-            response = ByteUtility.crc16(input, input.length, 0);
+            response = ByteUtility.crc16(input, 0, input.length);
         } catch (Exception ignored) { }
 
         return response;
@@ -132,7 +132,7 @@ public class DataUtility {
      */
     @Deprecated
     public static int getIntFromByteArray(byte[] input, int length, int offset) {
-        return ByteUtility.getInt(input, length, offset);
+        return ByteUtility.getInt(input, offset, length);
     }
 
     /**
