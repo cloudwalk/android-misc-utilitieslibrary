@@ -25,19 +25,19 @@ public class BundleUtility {
     private static JSONArray _getJSONArray(List list) {
         // Log.d(TAG, "_getJSONArrayFromList");
 
-        JSONArray jsonArray = new JSONArray();
+        JSONArray array = new JSONArray();
 
         for (Object object : list) {
             if (object instanceof Bundle) {
-                jsonArray.put(getJSONObject((Bundle) object));
+                array.put(getJSONObject((Bundle) object));
             } else if (object instanceof List) {
-                jsonArray.put(_getJSONArray((List) object));
+                array.put(_getJSONArray((List) object));
             } else {
-                jsonArray.put(object);
+                array.put(object);
             }
         }
 
-        return jsonArray;
+        return array;
     }
 
     /**

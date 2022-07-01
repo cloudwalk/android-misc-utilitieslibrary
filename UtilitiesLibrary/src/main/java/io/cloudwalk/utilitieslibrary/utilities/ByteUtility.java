@@ -83,27 +83,11 @@ public class ByteUtility {
 
         input.reset();
 
-        for (int i = 0; i < length; i++) { input.write((byte) 0x00); }
-
-        return input.toByteArray();
-    }
-
-    /**
-     * Same as {@link ByteUtility#clear(ByteArrayOutputStream)}.
-     *
-     * @param input {@code {@link ByteArrayOutputStream}[]}
-     * @return {@code null}
-     */
-    public static byte[] clear(ByteArrayOutputStream[] input) {
-        // Log.d(TAG, "clear");
-
-        if (input != null) {
-            for (int i = 0; i < input.length; i++) {
-                clear(input[i]);
-            }
+        for (int i = 0; i < length; i++) {
+            input.write((byte) 0x00);
         }
 
-        return null;
+        return input.toByteArray();
     }
 
     /**
@@ -120,9 +104,27 @@ public class ByteUtility {
 
         input.reset();
 
-        for (int i = 0; i < size; i++) { input.write((byte) 0x00); }
+        for (int i = 0; i < size; i++) {
+            input.write((byte) 0x00);
+        }
 
         return input.toByteArray();
+    }
+
+    /**
+     * Same as {@link ByteUtility#clear(ByteArrayOutputStream)}.
+     *
+     * @param input {@code {@link ByteArrayOutputStream}[]}
+     * @return {@code null}
+     */
+    public static byte[] clear(@NotNull ByteArrayOutputStream[] input) {
+        // Log.d(TAG, "clear");
+
+        for (ByteArrayOutputStream entry : input) {
+            clear(entry);
+        }
+
+        return null;
     }
 
     /**
@@ -151,10 +153,12 @@ public class ByteUtility {
     public static byte[] clear(byte[]... input) {
         // Log.d(TAG, "clear");
 
-        if (input != null) {
+        try {
             for (byte[] entry : input) {
                 clear(entry);
             }
+        } catch (Exception exception) {
+            Log.e(TAG, Log.getStackTraceString(exception));
         }
 
         return null;
@@ -277,7 +281,9 @@ public class ByteUtility {
 
         int i = input.length - 1;
 
-        while (i >= 0 && input[i] == 0) { --i; }
+        while (i >= 0 && input[i] == 0) {
+            i = i - 1;
+        }
 
         return Arrays.copyOf(input, i + 1);
     }
