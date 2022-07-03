@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [1.1.0] - YYYY-MM-DD
+## [1.1.0] - 2022-07-03
 - Update `ServiceUtility`:
   - Remove `ServiceUtility#execute(Runnable)`.
   - Add `ServiceUtility#set(ComponentName, IBinder, ServiceConnection)`.
