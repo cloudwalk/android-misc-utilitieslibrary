@@ -14,7 +14,7 @@ android {
         minSdkVersion 22
         targetSdkVersion 32
         versionCode 101
-        versionName "1.1.0-untagged"
+        versionName "1.1.0"
 
         buildConfigField 'String', 'PACKAGE_ID', "\"${groupId}.${artifactId}\""
         buildConfigField 'int', 'VERSION_CODE', "${versionCode}"

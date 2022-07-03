@@ -39,9 +39,7 @@ public class ServiceUtility {
         public void onSuccess();
 
         /**
-         * Indicates a service was disconnected, isn't found or its bind failed due to missing
-         * permissions.<br>
-         * A reconnection strategy is recommended in here.
+         * Indicates service disconnected, not found or bind failed due to missing permissions.
          */
         public void onFailure();
     }
@@ -55,9 +53,6 @@ public class ServiceUtility {
         /* Nothing to do */
     }
 
-    /**
-     * See {@link ServiceUtility#retrieve(String, String)}.
-     */
     private static IBinder _getService(@NotNull String pkg, @NotNull String cls) {
         // Log.d(TAG, "_getService");
 
@@ -87,12 +82,6 @@ public class ServiceUtility {
         return service;
     }
 
-    /**
-     * Searches for a previously bounded service.
-     *
-     * @param cls service full class name
-     * @return index of the service in the list
-     */
     private static int _searchService(String cls) {
         // Log.d(TAG, "_searchService");
 
@@ -115,14 +104,6 @@ public class ServiceUtility {
         return index;
     }
 
-    /**
-     * Unbinds a service according to given {@code pkg} and {@code cls}, triggering previously
-     * registered connection {@code callback} in the process.
-     *
-     * @param pkg service package name
-     * @param cls service class name
-     * @param callback {@link ServiceUtility.Callback}
-     */
     private static void _onFailure(String pkg, String cls, Callback callback) {
         // Log.d(TAG, "_onFailure");
 
@@ -134,9 +115,6 @@ public class ServiceUtility {
         }.start();
     }
 
-    /**
-     * See {@link ServiceUtility#register(String, String, Bundle, Callback)}.
-     */
     private static void _register(String pkg, String cls, Bundle extras, Callback callback) {
         // Log.d(TAG, "_register");
 
@@ -209,9 +187,6 @@ public class ServiceUtility {
         } while (true);
     }
 
-    /**
-     * @param service {@link IBinder}
-     */
     private static void _setService(ComponentName name, IBinder service, ServiceConnection serviceConnection) {
         // Log.d(TAG, "_setService");
 
@@ -232,9 +207,6 @@ public class ServiceUtility {
         }
     }
 
-    /**
-     * See {@link ServiceUtility#unregister(String, String)}.
-     */
     private static void _unregister(String pkg, String cls) {
         // Log.d(TAG, "_unregister");
 
@@ -254,41 +226,16 @@ public class ServiceUtility {
     }
 
     /**
-     * Retrieves an instance of {@link IBinder} according to given {@code pkg} and {@code cls}.
+     * Self-describing.
      *
      * @param pkg service package name
      * @param cls service class name
-     * @return {@link IBinder}
+     * @return {@link IBinder}: {@code null} when the requested service isn't registered.
      */
-    public static IBinder retrieve(@NotNull String pkg, @NotNull String cls) {
-        // Log.d(TAG, "retrieve");
+    public static IBinder get(@NotNull String pkg, @NotNull String cls) {
+        // Log.d(TAG, "get");
 
         return _getService(pkg, cls);
-    }
-
-    /**
-     * Starts a new thread and calls {@link Runnable#run()} from given {@link Runnable}.<br>
-     * Intended as a helper for UI thread calls.<br>
-     * <code>
-     *     <pre>
-     * ServiceUtility.execute(new Runnable() {
-     *    {@literal @}Override
-     *     public void execute() {
-     *         // code you shouldn't run on the main thread goes here
-     *     }
-     * });
-     *     </pre>
-     * </code>
-     *
-     * @param runnable {@link Runnable}
-     */
-    public static void execute(@NotNull Runnable runnable) {
-        // Log.d(TAG, "execute");
-
-        new Thread() {
-            @Override
-            public void run() { super.run(); runnable.run(); }
-        }.start();
     }
 
     /**
@@ -357,5 +304,11 @@ public class ServiceUtility {
         } finally {
             sSemaphore.release();
         }
+    }
+
+    public static void set(@NotNull ComponentName name, @NotNull IBinder service, @NotNull ServiceConnection serviceConnection) {
+        // Log.d(TAG, "set");
+
+        _setService(name, service, serviceConnection);
     }
 }

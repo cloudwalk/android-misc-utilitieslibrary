@@ -1,6 +1,11 @@
 # CHANGELOG
 
-## [1.1.0] - YYYY-MM-DD
+## [1.1.0] - 2022-07-03
+- Update `ServiceUtility`:
+  - Remove `ServiceUtility#execute(Runnable)`.
+  - Add `ServiceUtility#set(ComponentName, IBinder, ServiceConnection)`.
+  - Replace `ServiceUtility#retrieve(String, String)` by
+    `ServiceUtility#get(String, String)`.
 - Replace `DataUtility` by `BundleUtility`, `ByteUtility` and `StringUtility`.
 
 ## [1.0.14] - 2022-06-08
