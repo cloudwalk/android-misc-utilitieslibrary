@@ -61,8 +61,6 @@ public class ByteUtility {
             }
 
             return new String(response, UTF_8);
-        } else {
-            Log.e(TAG, String.format(US, "getHexString::input.length [%d] length [%d] offset [%d]", input.length, length, offset));
         }
 
         return "";
@@ -185,8 +183,6 @@ public class ByteUtility {
 
             if (length > offset) {
                 Arrays.fill(input, offset, length, (byte) 0x00);
-            } else {
-                Log.e(TAG, String.format(US, "clear::input.length [%d] offset [%d] length [%d]", input.length, offset, length));
             }
         }
 
